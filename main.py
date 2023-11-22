@@ -1,7 +1,16 @@
+#TODO
+#hide login password
+#after logging in, frame with scroll box that displays saved passwords
+#add functionality to account profile for adding, deleting, and editing accounts
+#encrypt saved passwords
+#improve UI
+#unittests
+
+
 from passwordgui import PasswordManager
 
-
-PasswordManager().mainloop()
+if __name__ == '__main__':
+    PasswordManager().mainloop()
 
 
 
