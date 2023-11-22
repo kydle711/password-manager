@@ -5,6 +5,7 @@
 #encrypt saved passwords
 #improve UI
 #unittests
+#add keylisteners for buttons
 
 
 from passwordgui import PasswordManager
