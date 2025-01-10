@@ -52,10 +52,11 @@ class PasswordManagerFrame(tk.Frame):
             title="ACCOUNT INFO SAVED", message="Account info successfully saved!",
             parent=self)
 
-    def account_info_delete_confirmation_request(self):
+    def account_info_delete_confirmation_request(self, account_name, username, password):
         return self.message_popup.askyesno(
             title="CONFIRM DELETION",
-            message="Are you sure you would like to delete this account?",
+            message="Are you sure you would like to delete this account?\n"
+                    f"{account_name, username, password}",
             parent=self)
 
     def deletion_canceled_message(self):
@@ -65,8 +66,8 @@ class PasswordManagerFrame(tk.Frame):
 
     def invalid_deletion_error_message(self):
         self.message_popup.showerror(title="UNABLE TO DELETE",
-                                     message="Invalid deletion request. Enter the account info you would\n"
-                                             " like to delete", parent=self)
+                                     message="Please enter the index number of the account to delete",
+                                     parent=self)
 
     def account_info_deleted_message(self):
         self.message_popup.showinfo(
@@ -75,6 +76,6 @@ class PasswordManagerFrame(tk.Frame):
 
     def invalid_account_info_error_message(self):
         self.message_popup.showerror(
-            title="USERNAME OR PASSWORD NOT ACCEPTED",
-            message="Verify no fields are left blank",
+            title="ACCOUNT NOT FOUND",
+            message="Enter a number for an account that exists",
             parent=self)

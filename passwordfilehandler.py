@@ -23,8 +23,7 @@ class PasswordFileHandler:
         """ This function takes the contents of the user's account file and writes
         it to the scrolling label on the UserAccountFrame.
         """
-        acct_info = self.cursor.execute("SELECT ROWID, * FROM accounts;")
-        return acct_info
+        return self.cursor.execute("SELECT ROWID, * FROM accounts;")
 
     def add_password_info(self, new_account: str, new_username: str, new_password: str):
         account = new_account
@@ -33,11 +32,18 @@ class PasswordFileHandler:
         self.cursor.execute("INSERT INTO accounts values(?, ?, ?);", (account, username, password))
         self.con.commit()
 
-    def delete_password_info(self):
+    def delete_password_info(self, index_to_delete):
         """ This function only deletes based off of an account name. This is to
         prevent a user from deleting multiple accounts that may have the same password.
         """
-        pass
+        self.cursor.execute(f"DELETE FROM accounts WHERE ROWID = {index_to_delete};")
+        self.con.commit()
+        self.cursor.execute("VACUUM accounts;")
+        self.con.commit()
+
+
+    def find_account_from_index(self, index):
+        return self.cursor.execute(f"SELECT * FROM accounts WHERE ROWID = {index};")
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         if exc_type is not None:
