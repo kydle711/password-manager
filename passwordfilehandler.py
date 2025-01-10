@@ -28,7 +28,7 @@ class PasswordFileHandler:
 
     def add_password_info(self, new_account: str, new_username: str, new_password: str):
         account = new_account
-        username = new_usernamegit 
+        username = new_username
         password = new_password
         self.cursor.execute("INSERT INTO accounts values(?, ?, ?);", (account, username, password))
         self.con.commit()

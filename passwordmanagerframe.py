@@ -9,7 +9,7 @@ class PasswordManagerFrame(tk.Frame):
 
     def display(self):
         self.configure(width=850, height=650)
-        self.pack(expand=1, fill='both')
+        self.place(relx=0.5, rely=0.5, anchor='center')
 
     def account_does_not_exist_error_message(self):
         self.message_popup.showerror(
