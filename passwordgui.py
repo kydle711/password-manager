@@ -10,34 +10,75 @@ class UserAccountFrame(PasswordManagerFrame):
     def __init__(self, username=None):
         super().__init__()
         self.username = username
+        self.INTERFACE_WIDTH = 170
+        self.INTERFACE_HEIGHT = 30
+        self.FONT_SIZE = 16
+
+        self.COLUMN_WIDTH = 160
+        self.INDEX_COL_X = 0.38
+        self.ACCOUNT_NAME_COL_X = 0.55
+        self.USERNAME_COL_X = 0.7
+        self.PASSWORD_COL_X = 0.85
+        self.INTERFACE_COL_X = 0.14
+        self.COLUMN_LABEL_Y = 0.12
+        self.COLUMN_BOX_Y = 0.58
+
         self.title_label = ctk.CTkLabel(
             master=self, width=400, height=40, font=("Arial", 24))
 
-        self.display_box = ctk.CTkTextbox(master=self, width=450, height=450)
+        self.index_label = ctk.CTkLabel(master=self, width=self.COLUMN_WIDTH, height=100, font=('normal', self.FONT_SIZE), text='Index')
+        self.account_name_label = ctk.CTkLabel(master=self, width=self.COLUMN_WIDTH, height=100, font=('normal', self.FONT_SIZE), text='Account Name')
+        self.username_label = ctk.CTkLabel(master=self, width=self.COLUMN_WIDTH, height=100, font=('normal', self.FONT_SIZE), text='Username')
+        self.password_label = ctk.CTkLabel(master=self, width=self.COLUMN_WIDTH, height=100, font=('normal', self.FONT_SIZE), text='Password')
+
+        self.index_box = ctk.CTkTextbox(master=self, width=self.COLUMN_WIDTH, height=450, font=('normal', self.FONT_SIZE))
+        self.account_name_box = ctk.CTkTextbox(master=self, width=self.COLUMN_WIDTH, height=450, font=('normal', self.FONT_SIZE))
+        self.username_box = ctk.CTkTextbox(master=self, width=self.COLUMN_WIDTH, height=450, font=('normal', self.FONT_SIZE))
+        self.password_box = ctk.CTkTextbox(master=self, width=self.COLUMN_WIDTH, height=450, font=('normal', self.FONT_SIZE))
+
+        self.new_account_name_entry = ctk.CTkEntry(
+            master=self, width=self.INTERFACE_WIDTH, height=self.INTERFACE_HEIGHT, placeholder_text='Account Name',
+            font=("Arial", self.FONT_SIZE))
+
         self.new_username_entry = ctk.CTkEntry(
-            master=self, width=170, height=50, placeholder_text='Username',
-            font=("Arial", 20))
+            master=self, width=self.INTERFACE_WIDTH, height=self.INTERFACE_HEIGHT, placeholder_text='Username or Email',
+            font=("Arial", self.FONT_SIZE))
 
         self.new_password_entry = ctk.CTkEntry(
-            master=self, width=170, height=50, placeholder_text='Password',
-            font=("Arial", 20))
+            master=self, width=self.INTERFACE_WIDTH, height=self.INTERFACE_HEIGHT, placeholder_text='Password',
+            font=("Arial", self.FONT_SIZE))
+
+        self.delete_index_entry = ctk.CTkEntry(
+            master=self, width=self.INTERFACE_WIDTH, height=self.INTERFACE_HEIGHT, placeholder_text='Index to delete',
+            font=("Arial", self.FONT_SIZE))
 
         self.delete_button = ctk.CTkButton(
-            master=self, width=170, height=50, text='DELETE', fg_color='dark red',
-            text_color='black', font=("Arial", 20), command=self.delete_account_info)
+            master=self, width=self.INTERFACE_WIDTH, height=self.INTERFACE_HEIGHT, text='DELETE', fg_color='dark red',
+            text_color='black', font=("Arial", self.FONT_SIZE), command=self.delete_account_info)
 
         self.add_button = ctk.CTkButton(
-            master=self, width=170, height=50, text='ADD', fg_color='dark green',
-            text_color='black', font=("Arial", 20), command=self.add_account_info)
+            master=self, width=self.INTERFACE_WIDTH, height=self.INTERFACE_HEIGHT, text='ADD', fg_color='dark green',
+            text_color='black', font=("Arial", self.FONT_SIZE), command=self.add_account_info)
 
         self.title_label.place(relx=0.5, rely=0.08, anchor='center')
-        self.display_box.place(relx=0.6, rely=0.58, anchor='center')
-        self.new_username_entry.place(relx=0.14, rely=0.32, anchor='center')
-        self.new_password_entry.place(relx=0.14, rely=0.47, anchor='center')
-        self.add_button.place(relx=0.14, rely=0.62, anchor='center')
-        self.delete_button.place(relx=0.14, rely=0.77, anchor='center')
 
-        #self.print_account_list()
+        self.index_label.place(relx=self.INDEX_COL_X, rely=self.COLUMN_LABEL_Y)  # place text box header labels
+        self.account_name_label.place(relx=self.ACCOUNT_NAME_COL_X, rely=self.COLUMN_LABEL_Y)
+        self.username_label.place(relx=self.USERNAME_COL_X, rely=self.COLUMN_LABEL_Y)
+        self.password_label.place(relx=self.PASSWORD_COL_X, rely=self.COLUMN_LABEL_Y)
+
+        self.index_box.place(relx=self.INDEX_COL_X, rely=self.COLUMN_BOX_Y, anchor='center')  # place text boxes
+        self.account_name_box.place(relx=self.ACCOUNT_NAME_COL_X, rely=self.COLUMN_BOX_Y, anchor='center')
+        self.username_box.place(relx=self.USERNAME_COL_X, rely=self.COLUMN_BOX_Y, anchor='center')
+        self.password_box.place(relx=self.PASSWORD_COL_X, rely=self.COLUMN_BOX_Y, anchor='center')
+
+        self.new_account_name_entry.place(relx=self.INTERFACE_COL_X, rely=0.24, anchor='center')  # place entries
+        self.new_username_entry.place(relx=self.INTERFACE_COL_X, rely=0.32, anchor='center')
+        self.new_password_entry.place(relx=self.INTERFACE_COL_X, rely=0.40, anchor='center')
+        self.delete_index_entry.place(relx=self.INTERFACE_COL_X, rely=0.75, anchor='center')
+
+        self.add_button.place(relx=self.INTERFACE_COL_X, rely=0.48, anchor='center')  # place buttons
+        self.delete_button.place(relx=self.INTERFACE_COL_X, rely=0.83, anchor='center')
 
     def display(self):
         """ This method displays the UserAccountFrame and creates a unique file
@@ -49,17 +90,31 @@ class UserAccountFrame(PasswordManagerFrame):
 
     def print_account_list(self):
         """ Takes the user's account info read by the file handler
-        and displays it to the scrollable frame box in the User_Account_Frame.
+        and displays it to the corresponding CtkTextBox in the User_Account_Frame.
         """
+        self.index_box.configure(state='normal')  # configure boxes for editing and delete previous contents
+        self.index_box.delete("0.0", "end")
+        self.account_name_box.configure(state='normal')
+        self.account_name_box.delete("0.0", "end")
+        self.username_box.configure(state='normal')
+        self.username_box.delete("0.0", "end")
+        self.password_box.configure(state='normal')
+        self.password_box.delete("0.0", "end")
+
         with PasswordFileHandler(self.username) as pfh:
             account_info_object = pfh.read_accounts()
-            i = 0
-            for row in account_info_object:
-                self.display_box.insert(f"{i}.0", row)
+            i = 1
+            for item in account_info_object:
+                self.index_box.insert(f"{i}.0", f"{item[0]}\n")
+                self.account_name_box.insert(f"{i}.0", f"{item[1]}\n")
+                self.username_box.insert(f"{i}.0", f"{item[2]}\n")
+                self.password_box.insert(f"{i}.0", f"{item[3]}\n")
                 i += 1
 
-
-
+            self.index_box.configure(state='disabled')  # reconfigure boxes so they can't be edited by user
+            self.account_name_box.configure(state='disabled')
+            self.username_box.configure(state='disabled')
+            self.password_box.configure(state='disabled')
 
     def add_account_info(self):
         """ If 'username' and 'password' entry boxes aren't empty, add them to the
@@ -67,9 +122,10 @@ class UserAccountFrame(PasswordManagerFrame):
         """
         new_username = self.new_username_entry.get()
         new_password = self.new_password_entry.get()
-        if new_password != "" and new_username != "":
+        new_account = self.new_account_name_entry.get()
+        if new_password != "" and new_username != "" and new_account != "":
             with PasswordFileHandler(self.username) as pfh:
-                pfh.add_password_info(new_username, new_password)
+                pfh.add_password_info(new_account, new_username, new_password)
             self.account_info_saved_message()
         else:
             self.invalid_account_info_error_message()
@@ -95,8 +151,6 @@ class UserAccountFrame(PasswordManagerFrame):
                     self.deletion_canceled_message()
         if not found_account:
             self.invalid_deletion_error_message()
-
-
 
 
 class LoginFrame(PasswordManagerFrame):
@@ -204,28 +258,24 @@ class NewAccountFrame(PasswordManagerFrame):
 class PasswordManager(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.geometry('800x800')
+        self.geometry('950x800')
         self.title("Password Manager")
-
         self.background_frame = BackgroundFrame(self)
-        self.login_frame = LoginFrame(self)
-        self.new_account_frame = NewAccountFrame(self)
-        self.user_account_frame = UserAccountFrame(self)
-        self.login_frame.display()
-        self.resizable(width=False, height=False)
+        self.current_frame = LoginFrame(self)
+        self.current_frame.display()
+        #self.resizable(width=False, height=False)
 
     def set_login_frame(self):
-        self.new_account_frame.place_forget()
-        self.new_account_frame.clear_entries()
-        self.login_frame.display()
+        self.current_frame = LoginFrame(self)
+        self.current_frame.display()
 
     def set_new_account_frame(self):
-        self.login_frame.place_forget()
-        self.login_frame.clear_entries()
-        self.new_account_frame.display()
+        self.current_frame = NewAccountFrame(self)
+        self.current_frame.display()
 
     def set_user_account_frame(self, username):
-        self.user_account_frame.username = username
-        self.login_frame.place_forget()
-        self.login_frame.clear_entries()
-        self.user_account_frame.display()
+        self.current_frame = UserAccountFrame(self)
+        self.current_frame.username = username
+        self.current_frame.print_account_list()
+        self.current_frame.display()
+

@@ -8,13 +8,8 @@ class PasswordManagerFrame(tk.Frame):
         self.message_popup = tk.messagebox
 
     def display(self):
-        self.configure(width=650, height=650)
-        self.place(relx=0.5, rely=0.5, anchor='center')
-
-    def clear_entries(self):
-        for widget in self.winfo_children():
-            if 'entry' in widget.winfo_name():
-                widget.delete(0, tk.END)
+        self.configure(width=850, height=650)
+        self.pack(expand=1, fill='both')
 
     def account_does_not_exist_error_message(self):
         self.message_popup.showerror(
@@ -81,5 +76,5 @@ class PasswordManagerFrame(tk.Frame):
     def invalid_account_info_error_message(self):
         self.message_popup.showerror(
             title="USERNAME OR PASSWORD NOT ACCEPTED",
-            message="Verify username and password field are not blank",
+            message="Verify no fields are left blank",
             parent=self)

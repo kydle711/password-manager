@@ -11,4 +11,5 @@
 from passwordgui import PasswordManager
 
 if __name__ == '__main__':
-    PasswordManager().mainloop()
+    app = PasswordManager()
+    app.mainloop()
