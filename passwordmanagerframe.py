@@ -51,3 +51,35 @@ class PasswordManagerFrame(tk.Frame):
             title="USERNAME TOO SHORT", message="Username should be 6 characters or more",
             parent=self
         )
+
+    def account_info_saved_message(self):
+        self.message_popup.showinfo(
+            title="ACCOUNT INFO SAVED", message="Account info successfully saved!",
+            parent=self)
+
+    def account_info_delete_confirmation_request(self):
+        return self.message_popup.askyesno(
+            title="CONFIRM DELETION",
+            message="Are you sure you would like to delete this account?",
+            parent=self)
+
+    def deletion_canceled_message(self):
+        self.message_popup.showinfo(
+            title="DELETION CANCELED", message="Deletion request has been canceled",
+            parent=self)
+
+    def invalid_deletion_error_message(self):
+        self.message_popup.showerror(title="UNABLE TO DELETE",
+                                     message="Invalid deletion request. Enter the account info you would\n"
+                                             " like to delete", parent=self)
+
+    def account_info_deleted_message(self):
+        self.message_popup.showinfo(
+            title="ACCOUNT INFO DELETED", message="Account info successfully deleted!",
+            parent=self)
+
+    def invalid_account_info_error_message(self):
+        self.message_popup.showerror(
+            title="USERNAME OR PASSWORD NOT ACCEPTED",
+            message="Verify username and password field are not blank",
+            parent=self)

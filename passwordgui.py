@@ -1,10 +1,7 @@
 import os.path
-
 import customtkinter as ctk
-import tkinter as tk
-# from os.path import exists
-
 from passwordmanagerframe import PasswordManagerFrame
+from passwordfilehandler import PasswordFileHandler
 from passlib.hash import pbkdf2_sha256
 from background import BackgroundFrame
 
@@ -13,37 +10,93 @@ class UserAccountFrame(PasswordManagerFrame):
     def __init__(self, username=None):
         super().__init__()
         self.username = username
-
         self.title_label = ctk.CTkLabel(
-            master=self, width=100, height=40, font=("Arial", 24), )
+            master=self, width=400, height=40, font=("Arial", 24))
 
-        self.display_box = ctk.CTkScrollableFrame(master=self, width=450, height=450)
+        self.display_box = ctk.CTkTextbox(master=self, width=450, height=450)
         self.new_username_entry = ctk.CTkEntry(
-            master=self, width=140, height=50, placeholder_text='Username',
+            master=self, width=170, height=50, placeholder_text='Username',
             font=("Arial", 20))
 
         self.new_password_entry = ctk.CTkEntry(
-            master=self, width=140, height=50, placeholder_text='Password',
+            master=self, width=170, height=50, placeholder_text='Password',
             font=("Arial", 20))
 
         self.delete_button = ctk.CTkButton(
-            master=self, width=140, height=50, text='DELETE', fg_color='dark red',
-            text_color='black', font=("Arial", 20))
+            master=self, width=170, height=50, text='DELETE', fg_color='dark red',
+            text_color='black', font=("Arial", 20), command=self.delete_account_info)
 
         self.add_button = ctk.CTkButton(
-            master=self, width=140, height=50, text='ADD', fg_color='dark green',
-            text_color='black', font=("Arial", 20))
+            master=self, width=170, height=50, text='ADD', fg_color='dark green',
+            text_color='black', font=("Arial", 20), command=self.add_account_info)
 
         self.title_label.place(relx=0.5, rely=0.08, anchor='center')
         self.display_box.place(relx=0.6, rely=0.58, anchor='center')
-        self.new_username_entry.place(relx=0.15, rely=0.25, anchor='center')
-        self.new_password_entry.place(relx=0.15, rely=0.4, anchor='center')
-        self.add_button.place(relx=0.15, rely=0.55, anchor='center')
-        self.delete_button.place(relx=0.15, rely=0.7, anchor='center')
+        self.new_username_entry.place(relx=0.14, rely=0.32, anchor='center')
+        self.new_password_entry.place(relx=0.14, rely=0.47, anchor='center')
+        self.add_button.place(relx=0.14, rely=0.62, anchor='center')
+        self.delete_button.place(relx=0.14, rely=0.77, anchor='center')
+
+        #self.print_account_list()
 
     def display(self):
+        """ This method displays the UserAccountFrame and creates a unique file
+        handler object to manage the functions of a particular user's info.
+        """
         super().display()
-        self.title_label.configure(text=self.username + "'s Passwords")
+        self.configure(width=740)
+        self.title_label.configure(text="Password Manager")
+
+    def print_account_list(self):
+        """ Takes the user's account info read by the file handler
+        and displays it to the scrollable frame box in the User_Account_Frame.
+        """
+        with PasswordFileHandler(self.username) as pfh:
+            account_info_object = pfh.read_accounts()
+            i = 0
+            for row in account_info_object:
+                self.display_box.insert(f"{i}.0", row)
+                i += 1
+
+
+
+
+    def add_account_info(self):
+        """ If 'username' and 'password' entry boxes aren't empty, add them to the
+        user's database file.
+        """
+        new_username = self.new_username_entry.get()
+        new_password = self.new_password_entry.get()
+        if new_password != "" and new_username != "":
+            with PasswordFileHandler(self.username) as pfh:
+                pfh.add_password_info(new_username, new_password)
+            self.account_info_saved_message()
+        else:
+            self.invalid_account_info_error_message()
+        self.print_account_list()
+
+    def delete_account_info(self):
+        """ Checks for a username to delete, then checks if that
+        username exists in the user's account list, then gets user confirmation,
+        then deletes the info from the account list. It also tells the file handler
+        to update the file.
+        """
+        removed_username = self.new_username_entry.get()
+        found_account = False
+        for account_line in self.file_handler.account_list:
+            if removed_username == account_line[0]:
+                found_account = True
+                confirmation = self.account_info_delete_confirmation_request()
+                if confirmation:
+                    self.file_handler.account_list.remove(account_line)
+                    self.account_info_deleted_message()
+                    break
+                else:
+                    self.deletion_canceled_message()
+        if not found_account:
+            self.invalid_deletion_error_message()
+
+
 
 
 class LoginFrame(PasswordManagerFrame):
@@ -88,8 +141,6 @@ class LoginFrame(PasswordManagerFrame):
                 self.invalid_login_error_message()
         except FileNotFoundError:
             self.account_does_not_exist_error_message()
-        #except Exception as e:
-            #self.generic_error_message(e)
 
 
 class NewAccountFrame(PasswordManagerFrame):
@@ -154,7 +205,7 @@ class PasswordManager(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.geometry('800x800')
-        self.title("Kyle's Passwords")
+        self.title("Password Manager")
 
         self.background_frame = BackgroundFrame(self)
         self.login_frame = LoginFrame(self)
