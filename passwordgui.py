@@ -3,20 +3,22 @@ import customtkinter as ctk
 from passwordmanagerframe import PasswordManagerFrame
 from passwordfilehandler import PasswordFileHandler
 from passlib.hash import pbkdf2_sha256
-from background import BackgroundFrame
+
+
 
 
 class UserAccountFrame(PasswordManagerFrame):
-    def __init__(self, username=None):
+    def __init__(self, master, username):
         super().__init__()
+        self.master = master
         self.username = username
         self.INTERFACE_WIDTH = 170
         self.INTERFACE_HEIGHT = 30
         self.INTERFACE_COL_X = 0.12
         self.FONT_SIZE = 16
 
-        self.INDEX_COLUMN_WIDTH = 25
-        self.COLUMN_WIDTH = 164
+        self.INDEX_COLUMN_WIDTH = 40
+        self.COLUMN_WIDTH = 200
         self.INDEX_COL_X = 0.30
         self.ACCOUNT_NAME_COL_X = 0.44
         self.USERNAME_COL_X = 0.66
@@ -91,7 +93,6 @@ class UserAccountFrame(PasswordManagerFrame):
                                            font=("Arial", self.FONT_SIZE),
                                            command=self.delete_account_info)
 
-
         self.add_button = ctk.CTkButton(master=self,
                                         width=self.INTERFACE_WIDTH,
                                         height=self.INTERFACE_HEIGHT,
@@ -99,6 +100,13 @@ class UserAccountFrame(PasswordManagerFrame):
                                         text_color='black',
                                         font=("Arial", self.FONT_SIZE),
                                         command=self.add_account_info)
+
+        self.logout_button = ctk.CTkButton(master=self,
+                                           width=self.INTERFACE_WIDTH - 300,
+                                           height=self.INTERFACE_HEIGHT - 10,
+                                           text="LOGOUT", fg_color='dark red',
+                                           font=("Arial", self.FONT_SIZE),
+                                           command=self.logout)
 
         self.title_label.place(relx=0.5, rely=0.08, anchor='center')
 
@@ -117,17 +125,17 @@ class UserAccountFrame(PasswordManagerFrame):
         self.new_password_entry.place(relx=self.INTERFACE_COL_X, rely=0.44, anchor='center')
         self.add_button.place(relx=self.INTERFACE_COL_X, rely=0.52, anchor='center')
 
-
         self.delete_index_entry.place(relx=self.INTERFACE_COL_X, rely=0.74, anchor='center')
         self.delete_button.place(relx=self.INTERFACE_COL_X, rely=0.82, anchor='center')
+        self.logout_button.place(relx=0.9, rely=0.1, anchor='center')
 
     def display(self):
         """ This method displays the UserAccountFrame and creates a unique file
         handler object to manage the functions of a particular user's info.
         """
         super().display()
-        self.configure(width=740)
-        self.title_label.configure(text="Password Manager")
+        self.title_label.configure(text=f"{self.username}'s Accounts")
+        self.print_account_list()
 
     def print_account_list(self):
         """ Takes the user's account info read by the file handler
@@ -158,9 +166,6 @@ class UserAccountFrame(PasswordManagerFrame):
             self.password_box.configure(state='disabled')
 
     def add_account_info(self):
-        """ If 'username' and 'password' entry boxes aren't empty, add them to the
-        user's database file.
-        """
         new_username = self.new_username_entry.get()
         new_password = self.new_password_entry.get()
         new_account = self.new_account_name_entry.get()
@@ -173,11 +178,7 @@ class UserAccountFrame(PasswordManagerFrame):
         self.print_account_list()
 
     def delete_account_info(self):
-        """ Checks for a username to delete, then checks if that
-        username exists in the user's account list, then gets user confirmation,
-        then deletes the info from the account list. It also tells the file handler
-        to update the file.
-        """
+
         def _is_int(int_input):
             try:
                 int(int_input)
@@ -198,7 +199,7 @@ class UserAccountFrame(PasswordManagerFrame):
                     username = item[1]
                     password = item[2]
 
-            if self.account_info_delete_confirmation_request(account_name, username, password):
+            if self.account_info_delete_confirmation(account_name, username, password):
                 with PasswordFileHandler(self.username) as pfh:
                     pfh.delete_password_info(index_to_remove)
                 self.account_info_deleted_message()
@@ -209,6 +210,8 @@ class UserAccountFrame(PasswordManagerFrame):
         else:
             self.invalid_deletion_error_message()
 
+    def logout(self):
+        self.master.set_login_frame()
 
 
 class LoginFrame(PasswordManagerFrame):
@@ -216,20 +219,20 @@ class LoginFrame(PasswordManagerFrame):
         super().__init__()
         self.master = master
         self.username_field = ctk.CTkEntry(
-            master=self, width=340, height=60, corner_radius=10, font=("Arial", 20),
+            master=self, width=340, height=60, corner_radius=5, font=("Arial", 20),
             placeholder_text='Enter your username')
 
         self.password_field = ctk.CTkEntry(
-            master=self, width=340, height=60, corner_radius=10, font=("Arial", 20),
+            master=self, width=340, height=60, corner_radius=5, font=("Arial", 20),
             placeholder_text='Enter your password')
 
         self.login_button = ctk.CTkButton(
-            master=self, width=200, height=60, corner_radius=10, text='LOG IN',
+            master=self, width=200, height=60, corner_radius=5, text='LOG IN',
             text_color='black', fg_color='gray', border_color='dark blue',
             border_width=2, font=("Arial", 25), command=self.log_in)
 
         self.new_account_button = ctk.CTkButton(
-            master=self, width=160, height=40, corner_radius=4, text='Create new account',
+            master=self, width=160, height=40, corner_radius=5, text='Create new account',
             text_color='black', fg_color='gray', border_color='dark blue',
             border_width=1, font=("Arial", 14), command=master.set_new_account_frame)
 
@@ -239,7 +242,6 @@ class LoginFrame(PasswordManagerFrame):
         self.password_field.place(relx=0.5, rely=0.5, anchor='center')
 
     def log_in(self):
-        master = self.master
         username = self.username_field.get()
         password = self.password_field.get()
         account_file = username + '.acct'
@@ -248,7 +250,7 @@ class LoginFrame(PasswordManagerFrame):
                 stored_password = password_file.readline()
             if pbkdf2_sha256.verify(password, stored_password):
                 self.logging_in_message()
-                master.set_user_account_frame(username)
+                self.master.set_user_account_frame(username)
             else:
                 self.invalid_login_error_message()
         except FileNotFoundError:
@@ -316,12 +318,11 @@ class NewAccountFrame(PasswordManagerFrame):
 class PasswordManager(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.geometry('950x800')
+        self.geometry('750x650')
         self.title("Password Manager")
-        self.background_frame = BackgroundFrame(self)
         self.current_frame = LoginFrame(self)
+        self.resizable(width=True, height=True)
         self.current_frame.display()
-        # self.resizable(width=False, height=False)
 
     def set_login_frame(self):
         self.current_frame = LoginFrame(self)
@@ -332,7 +333,5 @@ class PasswordManager(ctk.CTk):
         self.current_frame.display()
 
     def set_user_account_frame(self, username):
-        self.current_frame = UserAccountFrame(self)
-        self.current_frame.username = username
-        self.current_frame.print_account_list()
+        self.current_frame = UserAccountFrame(self, username)
         self.current_frame.display()

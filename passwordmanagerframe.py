@@ -1,15 +1,18 @@
 import tkinter as tk
+from customtkinter import CTkFrame
 from tkinter import messagebox
 
 
-class PasswordManagerFrame(tk.Frame):
-    def __init__(self):
-        super().__init__()
+class PasswordManagerFrame(CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
         self.message_popup = tk.messagebox
 
     def display(self):
-        self.configure(width=850, height=650)
-        self.place(relx=0.5, rely=0.5, anchor='center')
+        self.pack(expand=True, fill='both', padx=30, pady=30)
+
 
     def account_does_not_exist_error_message(self):
         self.message_popup.showerror(
@@ -52,7 +55,7 @@ class PasswordManagerFrame(tk.Frame):
             title="ACCOUNT INFO SAVED", message="Account info successfully saved!",
             parent=self)
 
-    def account_info_delete_confirmation_request(self, account_name, username, password):
+    def account_info_delete_confirmation(self, account_name, username, password):
         return self.message_popup.askyesno(
             title="CONFIRM DELETION",
             message="Are you sure you would like to delete this account?\n"
