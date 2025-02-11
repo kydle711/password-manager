@@ -8,6 +8,10 @@ class PasswordManagerFrame(CTkFrame):
         super().__init__(master)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        self.font = ('Arial', 20)
+        self.entry_width = 200
+        self.widget_height = 40
+        self.button_width = 160
         self.message_popup = tk.messagebox
 
     def display(self):

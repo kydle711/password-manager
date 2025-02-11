@@ -17,62 +17,70 @@ class UserAccountFrame(PasswordManagerFrame):
         self.height = 650
         self.username = username
         self.text_box_list = []
-        self.font = ('Arial', 20)
 
         self.title_label = ctk.CTkLabel(master=self, font=("Arial", 28),
                                         text=f"{self.username}'s Accounts")
-
 
         self.index_label = ctk.CTkLabel(master=self, text='Index', font=self.font)
         self.account_name_label = ctk.CTkLabel(master=self, text='Account', font=self.font)
         self.username_label = ctk.CTkLabel(master=self, text='Username', font=self.font)
         self.password_label = ctk.CTkLabel(master=self, text='Password', font=self.font)
 
-        self.index_box = ctk.CTkTextbox(master=self, width=25, height=400, font=self.font)
-        self.account_name_box = ctk.CTkTextbox(master=self, width=250, height=400, font=self.font)
-        self.username_box = ctk.CTkTextbox(master=self, width=250, height=400, font=self.font)
-        self.password_box = ctk.CTkTextbox(master=self, width=250, height=400, font=self.font)
+        self.index_box = ctk.CTkTextbox(master=self, width=25, height=400,
+                                        wrap='none', font=self.font)
+        self.account_name_box = ctk.CTkTextbox(master=self, width=250, height=400,
+                                               wrap='none', font=self.font)
+        self.username_box = ctk.CTkTextbox(master=self, width=250, height=400,
+                                           wrap='none', font=self.font)
+        self.password_box = ctk.CTkTextbox(master=self, width=250, height=400,
+                                           wrap='none', font=self.font)
 
         self.text_box_list.append(self.index_box)
         self.text_box_list.append(self.account_name_box)
         self.text_box_list.append(self.username_box)
         self.text_box_list.append(self.password_box)
 
-        self.new_account_name_entry = ctk.CTkEntry(master=self, placeholder_text='Account Name')
-        self.new_username_entry = ctk.CTkEntry(master=self, placeholder_text='Username or Email')
-        self.new_password_entry = ctk.CTkEntry(master=self, placeholder_text='Password')
-        self.delete_index_entry = ctk.CTkEntry(master=self, placeholder_text='Index to delete')
+        self.new_account_name_entry = ctk.CTkEntry(master=self, font=self.font,
+                                                   placeholder_text='Account Name')
+        self.new_username_entry = ctk.CTkEntry(master=self, font=self.font,
+                                               placeholder_text='Username or Email')
+        self.new_password_entry = ctk.CTkEntry(master=self, font=self.font,
+                                               placeholder_text='Password')
+        self.delete_index_entry = ctk.CTkEntry(master=self, font=self.font,
+                                               placeholder_text='Index to delete')
 
-        self.delete_button = ctk.CTkButton(master=self, width=150, text='DELETE',
+        self.delete_button = ctk.CTkButton(master=self, width=100, text='DELETE',
+                                           font=self.font, fg_color='dark red',
                                            command=self.delete_account_info)
 
-        self.add_button = ctk.CTkButton(master=self, width=150, text='ADD',
+        self.add_button = ctk.CTkButton(master=self, width=100, text='ADD',
+                                        font=self.font, fg_color='dark green',
                                         command=self.add_account_info)
 
-        self.logout_button = ctk.CTkButton(master=self, width=150, text="LOGOUT",
-                                           command=self.logout)
+        self.logout_button = ctk.CTkButton(master=self, width=130, text="LOG OUT",
+                                           font=self.font, command=self.logout)
 
-        self.configure_grid()       # config weights of columns and rows
+        self._configure_grid()  # config weights of columns and rows
 
-        self.title_label.grid(row=0, column=1, columnspan=4, pady=20)
+        self.title_label.grid(row=0, column=1, columnspan=3, pady=20)
 
-        self.index_label.grid(row=1, column=0)
+        self.index_label.grid(row=1, column=0, sticky='e')
         self.account_name_label.grid(row=1, column=1)
         self.username_label.grid(row=1, column=2)
         self.password_label.grid(row=1, column=3)
 
-        self.index_box.grid(row=2, column=0, sticky='nsew', padx=(30, 4))
+        self.index_box.grid(row=2, column=0, sticky='nse', padx=(30, 4))
         self.account_name_box.grid(row=2, column=1, sticky='nsew', padx=4)
         self.username_box.grid(row=2, column=2, sticky='nsew', padx=4)
         self.password_box.grid(row=2, column=3, sticky='nsew', padx=(4, 30))
 
-        self.add_button.grid(row=3, column=0, sticky='n', pady=20)
-        self.new_account_name_entry.grid(row=3, column=1, sticky='n', pady=20)
-        self.new_username_entry.grid(row=3, column=2, sticky='n', pady=20)
-        self.new_password_entry.grid(row=3, column=3, sticky='n', pady=20)
+        self.add_button.grid(row=3, column=0, sticky='new', pady=20, padx=10)
+        self.new_account_name_entry.grid(row=3, column=1, sticky='new', pady=20, padx=10)
+        self.new_username_entry.grid(row=3, column=2, sticky='new', pady=20, padx=10)
+        self.new_password_entry.grid(row=3, column=3, sticky='new', pady=20, padx=10)
 
-        self.delete_button.grid(row=4, column=0, pady=20)
-        self.delete_index_entry.grid(row=4, column=1, pady=20)
+        self.delete_button.grid(row=4, column=0, pady=20, padx=10)
+        self.delete_index_entry.grid(row=4, column=1, pady=20, padx=10, sticky='w')
         self.logout_button.grid(row=4, column=3, pady=20)
 
     def display(self):
@@ -116,6 +124,10 @@ class UserAccountFrame(PasswordManagerFrame):
             self.invalid_account_info_error_message()
         self.print_account_list()
 
+        self.new_username_entry.delete(0,999)
+        self.new_account_name_entry.delete(0,999)
+        self.new_password_entry.delete(0,999)
+
     def delete_account_info(self):
 
         def _is_int(int_input):
@@ -152,8 +164,8 @@ class UserAccountFrame(PasswordManagerFrame):
     def logout(self):
         self.master.set_login_frame()
 
-    def configure_grid(self):
-        self.grid_columnconfigure(0,weight=0)
+    def _configure_grid(self):
+        self.grid_columnconfigure(0, weight=0)
         self.grid_columnconfigure(1, weight=5, uniform='a')
         self.grid_columnconfigure(2, weight=5, uniform='a')
         self.grid_columnconfigure(3, weight=5, uniform='a')
@@ -168,27 +180,38 @@ class UserAccountFrame(PasswordManagerFrame):
 class LoginFrame(PasswordManagerFrame):
     def __init__(self, master):
         super().__init__(master)
-        self.grid_rowconfigure(3, weight=2)
-        self.username_field = ctk.CTkEntry(
-            master=self, width=340, height=60, corner_radius=5, font=("Arial", 20),
-            placeholder_text='Enter your username')
+        self._configure_grid()
+        self.username_field = ctk.CTkEntry(master=self, font=self.font,
+                                           width=self.entry_width,
+                                           height=self.widget_height,
+                                           placeholder_text='Enter your username')
 
-        self.password_field = ctk.CTkEntry(
-            master=self, width=340, height=60, corner_radius=5, font=("Arial", 20),
-            placeholder_text='Enter your password')
+        self.password_field = ctk.CTkEntry(master=self, font=self.font,
+                                           width=self.entry_width,
+                                           height=self.widget_height,
+                                           placeholder_text='Enter your password')
 
-        self.login_button = ctk.CTkButton(
-            master=self, width=200, height=60, corner_radius=5, text='LOG IN',
-            font=("Arial", 25), command=self.log_in)
+        self.login_button = ctk.CTkButton(master=self, text='LOG IN',
+                                          width=self.button_width,
+                                          height=self.widget_height,
+                                          font=self.font, command=self.log_in)
 
-        self.new_account_button = ctk.CTkButton(
-            master=self, width=160, height=40, corner_radius=5, text='Create new account',
-            font=("Arial", 14), command=master.set_new_account_frame)
+        self.new_account_button = ctk.CTkButton(master=self, text='Create new account',
+                                                width=self.button_width,
+                                                height=self.widget_height,
+                                                font=self.font,
+                                                command=master.set_new_account_frame)
 
         self.username_field.grid(row=0, column=0, pady=10)
         self.password_field.grid(row=1, column=0, pady=10)
         self.login_button.grid(row=2, column=0, pady=10)
         self.new_account_button.grid(row=3, column=0, pady=10, padx=10, sticky='e')
+
+    def _configure_grid(self):
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=1)
+        self.grid_rowconfigure(3, weight=1)
 
     def log_in(self):
         username = self.username_field.get()
@@ -209,39 +232,39 @@ class LoginFrame(PasswordManagerFrame):
 class NewAccountFrame(PasswordManagerFrame):
     def __init__(self, master):
         super().__init__(master)
-        self.grid_rowconfigure(6, weight=2)
+        self._configure_grid()
         self.title_label = ctk.CTkLabel(
-            master=self, width=450, height=60, font=("Arial", 20),
+            master=self, font=('Arial', 26),
             text='CREATE A NEW ACCOUNT')
 
         self.username_field = ctk.CTkEntry(
-            master=self, width=340, height=60, corner_radius=10,
-            font=("Arial", 20), placeholder_text='Enter your username')
+            master=self, width=self.entry_width, height=self.widget_height,
+            font=self.font, placeholder_text='Enter your username')
 
         self.password_field_1 = ctk.CTkEntry(
-            master=self, width=340, height=60, corner_radius=10, font=("Arial", 20),
-            placeholder_text='Enter your password')
+            master=self, width=self.entry_width, height=self.widget_height,
+            font=self.font, placeholder_text='Enter your password')
 
         self.password_field_2 = ctk.CTkEntry(
-            master=self, width=340, height=60, corner_radius=10, font=("Arial", 20),
-            placeholder_text='Verify your password')
+            master=self, width=self.entry_width, height=self.widget_height,
+            font=self.font, placeholder_text='Verify your password')
 
         self.create_account_button = ctk.CTkButton(
-            master=self, width=220, height=60, corner_radius=10, text='CREATE ACCOUNT',
-            font=("Arial", 25), command=self.save_account_info)
+            master=self, width=self.button_width, height=self.widget_height,
+            font=self.font, text='CREATE ACCOUNT', command=self.create_account)
 
         self.back_button = ctk.CTkButton(
-            master=self, width=100, height=40, corner_radius=4, text='back',
-            font=("Arial", 14), command=master.set_login_frame)
+            master=self, width=self.button_width, height=self.widget_height,
+            font=self.font, text='back', command=master.set_login_frame)
 
         self.title_label.grid(row=0)
         self.username_field.grid(row=1, pady=10)
         self.password_field_1.grid(row=2, pady=10)
         self.password_field_2.grid(row=3, pady=10)
         self.create_account_button.grid(row=4, pady=10)
-        self.back_button.grid(row=5, sticky='se')
+        self.back_button.grid(row=5, sticky='se', padx=10, pady=10)
 
-    def save_account_info(self):
+    def create_account(self):
         username = self.username_field.get()
         pass1 = self.password_field_1.get()
         pass2 = self.password_field_2.get()
@@ -261,6 +284,13 @@ class NewAccountFrame(PasswordManagerFrame):
             self.master.set_login_frame()
         except Exception:
             self.generic_error_message(Exception)
+
+    def _configure_grid(self):
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=1)
+        self.rowconfigure(3, weight=1)
+        self.rowconfigure(4, weight=1)
 
 
 class PasswordManager(ctk.CTk):
