@@ -13,7 +13,6 @@ class PasswordManagerFrame(CTkFrame):
     def display(self):
         self.pack(expand=True, fill='both', padx=30, pady=30)
 
-
     def account_does_not_exist_error_message(self):
         self.message_popup.showerror(
             title="ERROR", message="Account does not exist!", parent=self)
@@ -79,6 +78,6 @@ class PasswordManagerFrame(CTkFrame):
 
     def invalid_account_info_error_message(self):
         self.message_popup.showerror(
-            title="ACCOUNT NOT FOUND",
-            message="Enter a number for an account that exists",
+            title="INCOMPLETE ACCOUNT DATA",
+            message="Fill in all account info fields",
             parent=self)
