@@ -6,7 +6,7 @@
 # add keylisteners for buttons
 
 
-from passwordgui2 import PasswordManager
+from passwordgui import PasswordManager
 
 if __name__ == '__main__':
     app = PasswordManager()
