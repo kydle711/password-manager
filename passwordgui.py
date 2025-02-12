@@ -1,6 +1,5 @@
 import os.path
 import customtkinter as ctk
-
 from passwordfilehandler import PasswordFileHandler
 from passwordmanagerframe import PasswordManagerFrame
 from passlib.hash import pbkdf2_sha256
@@ -84,30 +83,25 @@ class UserAccountFrame(PasswordManagerFrame):
         self.logout_button.grid(row=4, column=3, pady=20)
 
     def display(self):
-        """ This method displays the UserAccountFrame and creates a unique file
-        handler object to manage the functions of a particular user's info.
-        """
         super().display()
         self.title_label.configure(text=f"{self.username}'s Accounts")
         self.print_account_list()
 
     def print_account_list(self):
-        """ Takes the user's account info read by the file handler
-        and displays it to the corresponding CtkTextBox in the User_Account_Frame.
-        """
         for box in self.text_box_list:
             box.configure(state='normal')
             box.delete("0.0", "end")
 
         with PasswordFileHandler(self.username) as pfh:
-            account_info_object = pfh.read_accounts()
-            i = 1
-            for item in account_info_object:
-                self.index_box.insert(f"{i}.0", f"{item[0]}\n")
-                self.account_name_box.insert(f"{i}.0", f"{item[1]}\n")
-                self.username_box.insert(f"{i}.0", f"{item[2]}\n")
-                self.password_box.insert(f"{i}.0", f"{item[3]}\n")
-                i += 1
+            account_list = pfh.read_accounts()
+
+        i = 1
+        for item in account_list:
+            self.index_box.insert(f"{i}.0", f"{item[0]}\n")
+            self.account_name_box.insert(f"{i}.0", f"{item[1]}\n")
+            self.username_box.insert(f"{i}.0", f"{item[2]}\n")
+            self.password_box.insert(f"{i}.0", f"{item[3]}\n")
+            i += 1
 
         for box in self.text_box_list:
             box.configure(state='disabled')
@@ -265,6 +259,7 @@ class NewAccountFrame(PasswordManagerFrame):
         self.back_button.grid(row=5, sticky='se', padx=10, pady=10)
 
     def create_account(self):
+
         username = self.username_field.get()
         pass1 = self.password_field_1.get()
         pass2 = self.password_field_2.get()
@@ -276,6 +271,7 @@ class NewAccountFrame(PasswordManagerFrame):
             return self.nonmatching_password_error_message()
         elif os.path.exists(new_filename):
             return self.account_exists_error_message()
+
         try:
             hashed_password = pbkdf2_sha256.hash(pass1)
             with open(new_filename, 'w') as new_password_file:
