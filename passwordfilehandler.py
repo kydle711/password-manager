@@ -1,6 +1,6 @@
 import os.path
 import sqlite3
-from cryptography.fernet import Fernet
+from encryptionkey import InfoEncrypter
 
 
 class PasswordFileHandler:
@@ -8,62 +8,49 @@ class PasswordFileHandler:
     UserAccountFrame
     """
 
-    def __init__(self, user):
-        self.account_file = user + ".db"
-        self.key_file = user + ".key"
+    def __init__(self, account_database, key_file):
+        self.account_database = account_database
+        self.key_file = key_file
         self.con = None  # SQLite connection
         self.cursor = None  # SQLite cursor
-        self.key = None  # Fernet key
-
-        if os.path.exists(self.key_file):
-            with open(self.key_file, 'rb') as kf:
-                self.key = kf.readline()
-        else:
-            self.key = Fernet.generate_key()
-            with open(self.key_file, 'wb') as kf:
-                kf.write(self.key)
-
-        self.fernet = Fernet(self.key)
+        self.encryption_key = InfoEncrypter(self.key_file)
 
     def __enter__(self):
-        self.con = sqlite3.connect(self.account_file)
+        self.con = sqlite3.connect(self.account_database)
         self.cursor = self.con.cursor()
         title = self.cursor.execute("SELECT name FROM sqlite_master;")
         if title.fetchone() is None:  # If table doesn't exist, make one
             self.cursor.execute("CREATE TABLE accounts(account, username, password);")
         return self
 
-    def read_accounts(self):
-        account_data = self.cursor.execute("SELECT ROWID, * FROM accounts;")
-        encrypted_account_list = []
+    def read_accounts(self) -> list[list]:
+        self.cursor.execute("SELECT ROWID, * FROM accounts;")
+        account_data = self.cursor.fetchall()
         decrypted_account_list = []
         for account in account_data:
-            encrypted_account_list.append(account)
-
-        for account in encrypted_account_list:
             new_list = [account[0]]
             for item in account[1:]:
-                new_list.append(self.fernet.decrypt(item).decode())
+                new_list.append(self.encryption_key.decrypt_info(item))
             decrypted_account_list.append(new_list)
 
         return decrypted_account_list
 
-
-    def add_password_info(self, new_account: str, new_username: str, new_password: str):
-        account = self.fernet.encrypt(new_account.encode())
-        username = self.fernet.encrypt(new_username.encode())
-        password = self.fernet.encrypt(new_password.encode())
-        self.cursor.execute("INSERT INTO accounts values(?, ?, ?);", (account, username, password))
+    def add_account_info(self, account_info: list):
+        encrypted_info = [self.encryption_key.encrypt_info(item) for item in account_info]
+        self.cursor.execute("INSERT INTO accounts values(?, ?, ?);", encrypted_info)
         self.con.commit()
 
-    def delete_password_info(self, index_to_delete):
+    def delete_account_info(self, index_to_delete: int):
         self.cursor.execute(f"DELETE FROM accounts WHERE ROWID = {index_to_delete};")
         self.con.commit()
         self.cursor.execute("VACUUM accounts;")
         self.con.commit()
 
-    def find_account_from_index(self, index):
-        return self.cursor.execute(f"SELECT * FROM accounts WHERE ROWID = {index};")
+    def find_account_from_index(self, index: int) -> list:
+        self.cursor.execute(f"SELECT * FROM accounts WHERE ROWID = {index};")
+        account_info = self.cursor.fetchone()
+        decrypted_account = [self.encryption_key.decrypt_info(item) for item in account_info]
+        return decrypted_account
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         if exc_type is not None:

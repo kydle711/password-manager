@@ -5,8 +5,15 @@
 # add keylisteners for buttons
 
 
-from passwordgui import PasswordManager
+from passwordgui import PasswordManagerWindow
+from passwordmanager import PasswordManager
+from passwordfilehandler import PasswordFileHandler
+from encryptionkey import InfoEncrypter
 
 if __name__ == '__main__':
-    app = PasswordManager()
+
+    password_manager = PasswordManager()  # main logic in manager
+    app = PasswordManagerWindow(password_manager)  # app GUI with reference to manager
+    password_manager.set_window(app)  # Link manager back to GUI to allow function calls from buttons
+
     app.mainloop()
