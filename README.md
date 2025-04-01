@@ -26,4 +26,4 @@ The first version of this project was a simple CLI password manager that stored 
 
 
 ## Security
-This is a practice project, and has not reached a point yet where it is fully secure. It is more secure than saving your info in plaintext, however the encryption key is stored alongside your local account database in a text file. Please do not rely on this program for storage of critical information
+This is a practice project, and is **NOT fully secure** yet. It is more secure than saving your info in plaintext, however the encryption key is stored alongside your local account database in a text file. Please **DO NOT** rely on this program for storage of critical information.
