@@ -1,6 +1,6 @@
 ![Header](./P@55w0rd_M@n@g3r.png)
 
-###ABOUT
+### ABOUT
 A simple password manager with a customtkinter GUI. I made this program as a learning/portfolio project
 
 ## What I learned:
@@ -18,11 +18,11 @@ The first version of this project was a simple CLI password manager that stored 
 -Background image (tkinter caused lagging previously)
 -Account tags/organization
 
-##Dependencies
+## Dependencies
 -Customtkinter
 -tkinter
 -sqlite3
 
 
-##Security
+## Security
 This is a practice project, and has not reached a point yet where it is fully secure. It is more secure than saving your info in plaintext, however the encryption key is stored alongside your local account database in a text file. Please do not rely on this program for storage of critical information
