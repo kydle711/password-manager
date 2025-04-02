@@ -1,13 +1,9 @@
-# class for encrypting and decrypting
-# method to decrypt
-# method to encrypt
 
 import os.path
 from cryptography.fernet import Fernet
 
 
 class InfoEncrypter:
-
     def __init__(self, key_file):
         self.key_file = key_file
         self.encryption_key = None

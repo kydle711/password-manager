@@ -13,75 +13,17 @@ class UserAccountFrame(PasswordManagerFrame):
         self.text_box_list = []
         self.entry_box_list = []
 
-        self.title_label = ctk.CTkLabel(master=self, font=("Arial", 28),
-                                        text=f"{self.username}'s Accounts")
-
-        self.index_label = ctk.CTkLabel(master=self, text='Index', font=self.font)
-        self.account_name_label = ctk.CTkLabel(master=self, text='Account', font=self.font)
-        self.username_label = ctk.CTkLabel(master=self, text='Username', font=self.font)
-        self.password_label = ctk.CTkLabel(master=self, text='Password', font=self.font)
-
-        self.index_box = ctk.CTkTextbox(master=self, width=40, height=400,
-                                        wrap='none', font=self.font)
-        self.account_name_box = ctk.CTkTextbox(master=self, width=250, height=400,
-                                               wrap='none', font=self.font)
-        self.username_box = ctk.CTkTextbox(master=self, width=250, height=400,
-                                           wrap='none', font=self.font)
-        self.password_box = ctk.CTkTextbox(master=self, width=250, height=400,
-                                           wrap='none', font=self.font)
-
-        self.text_box_list.append(self.index_box)
-        self.text_box_list.append(self.account_name_box)
-        self.text_box_list.append(self.username_box)
-        self.text_box_list.append(self.password_box)
-
-        self.new_account_name_entry = ctk.CTkEntry(master=self, font=self.font,
-                                                   placeholder_text='Account Name')
-        self.new_username_entry = ctk.CTkEntry(master=self, font=self.font,
-                                               placeholder_text='Username or Email')
-        self.new_password_entry = ctk.CTkEntry(master=self, font=self.font,
-                                               placeholder_text='Password')
-        self.delete_index_entry = ctk.CTkEntry(master=self, font=self.font,
-                                               placeholder_text='Index to delete')
-
-        self.entry_box_list.append(self.new_account_name_entry)
-        self.entry_box_list.append(self.new_username_entry)
-        self.entry_box_list.append(self.new_password_entry)
-        self.entry_box_list.append(self.delete_index_entry)
-
-        self.delete_button = ctk.CTkButton(master=self, width=100, text='DELETE',
-                                           font=self.font, fg_color='dark red',
-                                           command=self.request_delete_account)
-
-        self.add_button = ctk.CTkButton(master=self, width=100, text='ADD',
-                                        font=self.font, fg_color='dark green',
-                                        command=self.request_add_account)
-
-        self.logout_button = ctk.CTkButton(master=self, width=130, text="LOG OUT",
-                                           font=self.font, command=self.logout)
+        self._configure_labels()
+        self._configure_boxes()
+        self._configure_entries()
+        self._configure_buttons()
 
         self._configure_grid()  # config weights of columns and rows
 
-        self.title_label.grid(row=0, column=1, columnspan=3, pady=20)
-
-        self.index_label.grid(row=1, column=0, sticky='e')
-        self.account_name_label.grid(row=1, column=1)
-        self.username_label.grid(row=1, column=2)
-        self.password_label.grid(row=1, column=3)
-
-        self.index_box.grid(row=2, column=0, sticky='nse', padx=(30, 4))
-        self.account_name_box.grid(row=2, column=1, sticky='nsew', padx=4)
-        self.username_box.grid(row=2, column=2, sticky='nsew', padx=4)
-        self.password_box.grid(row=2, column=3, sticky='nsew', padx=(4, 30))
-
-        self.add_button.grid(row=3, column=0, sticky='new', pady=20, padx=10)
-        self.new_account_name_entry.grid(row=3, column=1, sticky='new', pady=20, padx=10)
-        self.new_username_entry.grid(row=3, column=2, sticky='new', pady=20, padx=10)
-        self.new_password_entry.grid(row=3, column=3, sticky='new', pady=20, padx=10)
-
-        self.delete_button.grid(row=4, column=0, pady=20, padx=10)
-        self.delete_index_entry.grid(row=4, column=1, pady=20, padx=10, sticky='w')
-        self.logout_button.grid(row=4, column=3, pady=20)
+        self._place_labels()
+        self._place_boxes()
+        self._place_entries()
+        self._place_buttons()
 
     def display(self):
         super().display()
@@ -148,3 +90,79 @@ class UserAccountFrame(PasswordManagerFrame):
         self.grid_rowconfigure(2, weight=1)
         self.grid_rowconfigure(3, weight=0)
         self.grid_rowconfigure(4, weight=0)
+
+    def _configure_labels(self):
+        self.title_label = ctk.CTkLabel(master=self, font=("Arial", 28),
+                                        text=f"{self.username}'s Accounts")
+
+        self.index_label = ctk.CTkLabel(master=self, text='Index', font=self.font)
+        self.account_name_label = ctk.CTkLabel(master=self, text='Account', font=self.font)
+        self.username_label = ctk.CTkLabel(master=self, text='Username', font=self.font)
+        self.password_label = ctk.CTkLabel(master=self, text='Password', font=self.font)
+
+    def _configure_entries(self):
+        self.new_account_name_entry = ctk.CTkEntry(master=self, font=self.font,
+                                                   placeholder_text='Account Name')
+        self.new_username_entry = ctk.CTkEntry(master=self, font=self.font,
+                                               placeholder_text='Username or Email')
+        self.new_password_entry = ctk.CTkEntry(master=self, font=self.font,
+                                               placeholder_text='Password')
+        self.delete_index_entry = ctk.CTkEntry(master=self, font=self.font,
+                                               placeholder_text='Index to delete')
+
+        self.entry_box_list.append(self.new_account_name_entry)
+        self.entry_box_list.append(self.new_username_entry)
+        self.entry_box_list.append(self.new_password_entry)
+        self.entry_box_list.append(self.delete_index_entry)
+
+    def _configure_boxes(self):
+        self.index_box = ctk.CTkTextbox(master=self, width=40, height=400,
+                                        wrap='none', font=self.font)
+        self.account_name_box = ctk.CTkTextbox(master=self, width=250, height=400,
+                                               wrap='none', font=self.font)
+        self.username_box = ctk.CTkTextbox(master=self, width=250, height=400,
+                                           wrap='none', font=self.font)
+        self.password_box = ctk.CTkTextbox(master=self, width=250, height=400,
+                                           wrap='none', font=self.font)
+
+        self.text_box_list.append(self.index_box)
+        self.text_box_list.append(self.account_name_box)
+        self.text_box_list.append(self.username_box)
+        self.text_box_list.append(self.password_box)
+
+    def _configure_buttons(self):
+        self.delete_button = ctk.CTkButton(master=self, width=100, text='DELETE',
+                                           font=self.font, fg_color='dark red',
+                                           command=self.request_delete_account)
+
+        self.add_button = ctk.CTkButton(master=self, width=100, text='ADD',
+                                        font=self.font, fg_color='dark green',
+                                        command=self.request_add_account)
+
+        self.logout_button = ctk.CTkButton(master=self, width=130, text="LOG OUT",
+                                           font=self.font, command=self.logout)
+
+    def _place_labels(self):
+        self.title_label.grid(row=0, column=1, columnspan=3, pady=20)
+
+        self.index_label.grid(row=1, column=0, sticky='e')
+        self.account_name_label.grid(row=1, column=1)
+        self.username_label.grid(row=1, column=2)
+        self.password_label.grid(row=1, column=3)
+
+    def _place_entries(self):
+        self.new_account_name_entry.grid(row=3, column=1, sticky='new', pady=20, padx=10)
+        self.new_username_entry.grid(row=3, column=2, sticky='new', pady=20, padx=10)
+        self.new_password_entry.grid(row=3, column=3, sticky='new', pady=20, padx=10)
+        self.delete_index_entry.grid(row=4, column=1, pady=20, padx=10, sticky='w')
+
+    def _place_boxes(self):
+        self.index_box.grid(row=2, column=0, sticky='nse', padx=(30, 4))
+        self.account_name_box.grid(row=2, column=1, sticky='nsew', padx=4)
+        self.username_box.grid(row=2, column=2, sticky='nsew', padx=4)
+        self.password_box.grid(row=2, column=3, sticky='nsew', padx=(4, 30))
+
+    def _place_buttons(self):
+        self.add_button.grid(row=3, column=0, sticky='new', pady=20, padx=10)
+        self.delete_button.grid(row=4, column=0, pady=20, padx=10)
+        self.logout_button.grid(row=4, column=3, pady=20)
