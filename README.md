@@ -23,6 +23,8 @@ The first version of this project was a simple CLI password manager that stored 
 - Customtkinter
 - tkinter
 - sqlite3
+- pathlib
+- encryption
 
 
 ## Security
