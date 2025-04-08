@@ -1,4 +1,4 @@
-![Header](./P@55w0rd_M@n@g3r.png)
+![Header](./assets/P@55w0rd_M@n@g3r.png)
 
 ### ABOUT
 A simple password manager with a customtkinter GUI. I made this program as a learning/portfolio project
