@@ -14,7 +14,7 @@ class LoginFrame(PasswordManagerFrame):
                                            placeholder_text='Enter your username')
 
         self.password_field = ctk.CTkEntry(master=self, font=self.font,
-                                           width=self.entry_width,
+                                           width=self.entry_width, show='*',
                                            height=self.widget_height,
                                            placeholder_text='Enter your password')
 
