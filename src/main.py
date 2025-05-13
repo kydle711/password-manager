@@ -1,14 +1,14 @@
 # TODO
-# hide login password
-# encrypt saved passwords
+# build app package
 # unittests
 # add keylisteners for buttons
+# add export function?
+# add recovery function?
+# improve security?
 
 
 from passwordgui import PasswordManagerWindow
 from passwordmanager import PasswordManager
-from passwordfilehandler import PasswordFileHandler
-from encryptionkey import InfoEncrypter
 
 if __name__ == '__main__':
 

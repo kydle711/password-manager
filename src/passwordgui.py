@@ -9,7 +9,7 @@ from useraccountframe import UserAccountFrame
 
 ctk.set_default_color_theme("green")
 
-ICON_FILE_PATH = "../assets/lock.png"
+ICON_FILE_PATH = os.path.join('..', 'assets', 'lock.png')
 
 
 class PasswordManagerWindow(ctk.CTk):

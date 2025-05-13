@@ -103,7 +103,7 @@ class PasswordManager:
     def _check_unique_account_name(self, account_info: list) -> bool:
         with self.pfh(self.account_database, self.key_file) as file_handler:
             for account in file_handler.read_accounts():
-                if account_info[0] in account:
+                if account_info[0] == account[1]:
                     self.window.current_frame.duplicate_account_error()
                     return False
         return True

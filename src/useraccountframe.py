@@ -81,6 +81,10 @@ class UserAccountFrame(PasswordManagerFrame):
     def logout(self):
         self.master.password_manager.logout()
 
+    def scroll_boxes(self, *args):
+        for box in self.text_box_list:
+            box.yview(*args)
+
     def _configure_grid(self):
         self.grid_columnconfigure(0, weight=0)
         self.grid_columnconfigure(1, weight=5, uniform='a')
@@ -119,18 +123,27 @@ class UserAccountFrame(PasswordManagerFrame):
 
     def _configure_boxes(self):
         self.index_box = ctk.CTkTextbox(master=self, width=40, height=400,
-                                        wrap='none', font=self.font)
+                                        wrap='none', font=self.font,
+                                        activate_scrollbars=False)
         self.account_name_box = ctk.CTkTextbox(master=self, width=250, height=400,
-                                               wrap='none', font=self.font)
+                                               wrap='none', font=self.font,
+                                               activate_scrollbars=False)
         self.username_box = ctk.CTkTextbox(master=self, width=250, height=400,
-                                           wrap='none', font=self.font)
+                                           wrap='none', font=self.font,
+                                           activate_scrollbars=False)
         self.password_box = ctk.CTkTextbox(master=self, width=250, height=400,
-                                           wrap='none', font=self.font)
+                                           wrap='none', font=self.font,
+                                           activate_scrollbars=False)
+        self.scrollbar = ctk.CTkScrollbar(master=self, command=self.scroll_boxes)
 
         self.text_box_list.append(self.index_box)
         self.text_box_list.append(self.account_name_box)
         self.text_box_list.append(self.username_box)
         self.text_box_list.append(self.password_box)
+
+        # Connect boxes in list to my scrollbar
+        for box in self.text_box_list:
+            box.configure(yscrollcommand=self.scrollbar.set)
 
     def _configure_buttons(self):
         self.delete_button = ctk.CTkButton(master=self, width=100, text='DELETE',
@@ -162,7 +175,8 @@ class UserAccountFrame(PasswordManagerFrame):
         self.index_box.grid(row=2, column=0, sticky='nse', padx=(30, 4))
         self.account_name_box.grid(row=2, column=1, sticky='nsew', padx=4)
         self.username_box.grid(row=2, column=2, sticky='nsew', padx=4)
-        self.password_box.grid(row=2, column=3, sticky='nsew', padx=(4, 30))
+        self.password_box.grid(row=2, column=3, sticky='nsew', padx=4)
+        self.scrollbar.grid(row=2, column=4, sticky='ns', padx=(4,30))
 
     def _place_buttons(self):
         self.add_button.grid(row=3, column=0, sticky='new', pady=20, padx=10)
