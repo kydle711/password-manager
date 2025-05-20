@@ -4,6 +4,9 @@ from tkinter import messagebox
 
 
 class PasswordManagerFrame(CTkFrame):
+    """ Base frame class that is master of all other frames. Contains error and
+    message pop-ups. Allows for errors to be called under different contexts.
+    Also allows for easy addition of errors or messages. """
     def __init__(self, master):
         super().__init__(master)
         self.master = master

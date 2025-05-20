@@ -8,6 +8,8 @@ REL_PATH = os.path.join('..', 'data')
 
 
 class PasswordManager:
+    """ Handles the logic of the app. Interfaces with the different frames
+    depending on the context of the app. """
     def __init__(self):
         self.pfh = PasswordFileHandler
         self.active_account = None
@@ -18,6 +20,7 @@ class PasswordManager:
         self._verify_data_directory()
 
     def set_window(self, window):
+        """ Switch between the different frames. """
         self.window = window
 
     """ Create account methods """
@@ -26,10 +29,9 @@ class PasswordManager:
     def _check_unique_local_account(new_account_name: str) -> bool:
         return not os.path.exists(os.path.join(REL_PATH, new_account_name + '.acct'))
 
-    """ NOT CURRENTLY IN USE """
-
     @staticmethod
     def _check_username_length(new_username: str) -> bool:
+        """ Not currently being used. """
         return len(new_username) > 6
 
     @staticmethod
@@ -87,7 +89,7 @@ class PasswordManager:
         self.account_database = os.path.join(REL_PATH, username + ".db")
         self.key_file = os.path.join(REL_PATH, username + ".key")
 
-    """ user account methods """
+    """ User account methods """
 
     @staticmethod
     def _check_data_directory(dir_path) -> bool:
@@ -107,6 +109,7 @@ class PasswordManager:
         self.window.set_login_frame()
 
     def _reset(self):
+        """ Un-initialize user account variables when logging out. """
         self.active_account = None
         self.account_database = None
         self.key_file = None
@@ -117,6 +120,9 @@ class PasswordManager:
             return account_info
 
     def _check_unique_account_name(self, account_info: list) -> bool:
+        """ Verify each account added to the database has a unique account name
+        as the identifier. SQL will allow duplicates because the index is the
+        primary key. """
         with self.pfh(self.account_database, self.key_file) as file_handler:
             for account in file_handler.read_accounts():
                 if account_info[0] == account[1]:
@@ -156,6 +162,8 @@ class PasswordManager:
             self.window.current_frame.deletion_canceled_message()
 
     def _confirm_index_is_num(self, index_string: str) -> bool:
+        """ When deleting an account, confirm the string input by user can be
+        converted to an int. """
         if not _is_int(index_string):
             self.window.current_frame.invalid_deletion_error()
             return False
@@ -168,4 +176,5 @@ class PasswordManager:
 
     def _confirm_deletion(self, account_info) -> bool:
         account, username, password = account_info
-        return self.window.current_frame.account_info_delete_confirmation(account, username, password)
+        return self.window.current_frame.account_info_delete_confirmation(
+            account, username, password)

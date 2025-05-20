@@ -1,11 +1,11 @@
-import os.path
+
 import sqlite3
 from encryptionkey import InfoEncrypter
 
 
 class PasswordFileHandler:
-    """ This class handles all the functions of the unique user file for the
-    UserAccountFrame
+    """ This context manager class handles all the functions of the unique user
+    files for the UserAccountFrame
     """
 
     def __init__(self, account_database, key_file):

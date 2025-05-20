@@ -13,14 +13,14 @@ class UserAccountFrame(PasswordManagerFrame):
         self.text_box_list = []
         self.entry_box_list = []
 
-        self._configure_labels()
+        self._configure_labels()  # Abstracted away the config of elements for simplicity
         self._configure_boxes()
         self._configure_entries()
         self._configure_buttons()
 
         self._configure_grid()  # config weights of columns and rows
 
-        self._place_labels()
+        self._place_labels()  # Abstracted away placement as well
         self._place_boxes()
         self._place_entries()
         self._place_buttons()
