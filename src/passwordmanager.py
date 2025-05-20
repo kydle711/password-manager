@@ -15,6 +15,8 @@ class PasswordManager:
         self.key_file = None
         self.window = None
 
+        self._verify_data_directory()
+
     def set_window(self, window):
         self.window = window
 
@@ -25,6 +27,7 @@ class PasswordManager:
         return not os.path.exists(os.path.join(REL_PATH, new_account_name + '.acct'))
 
     """ NOT CURRENTLY IN USE """
+
     @staticmethod
     def _check_username_length(new_username: str) -> bool:
         return len(new_username) > 6
@@ -69,7 +72,7 @@ class PasswordManager:
         self.window.set_user_account_frame(username)
 
     @staticmethod
-    def _validate_account_name(username:str) -> bool:
+    def _validate_account_name(username: str) -> bool:
         return os.path.exists(os.path.join(REL_PATH, username + ".acct"))
 
     @staticmethod
@@ -85,6 +88,19 @@ class PasswordManager:
         self.key_file = os.path.join(REL_PATH, username + ".key")
 
     """ user account methods """
+
+    @staticmethod
+    def _check_data_directory(dir_path) -> bool:
+        return os.path.isdir(dir_path)
+
+    @staticmethod
+    def _create_data_directory(dir_path):
+        os.makedirs(dir_path)
+
+    def _verify_data_directory(self):
+        dir_path = os.path.join('..', 'data')
+        if not self._check_data_directory(dir_path):
+            self._create_data_directory(dir_path)
 
     def logout(self):
         self._reset()
