@@ -6,6 +6,7 @@ import customtkinter as ctk
 from loginframe import LoginFrame
 from newaccountframe import NewAccountFrame
 from useraccountframe import UserAccountFrame
+from usermenuframe import UserMenuFrame
 
 ctk.set_default_color_theme("green")
 
@@ -38,4 +39,9 @@ class PasswordManagerWindow(ctk.CTk):
     def set_user_account_frame(self, username):
         self.current_frame.destroy()
         self.current_frame = UserAccountFrame(self, username)
+        self.current_frame.display()
+
+    def set_user_menu_frame(self, username):
+        self.current_frame.destroy()
+        self.current_frame = UserMenuFrame(self, username)
         self.current_frame.display()

@@ -7,6 +7,7 @@ class PasswordFileHandler:
     """ This context manager class handles all the functions of the unique user
     files for the UserAccountFrame
     """
+    HEADERS = ['account', 'username', 'password']
 
     def __init__(self, account_database, key_file):
         self.account_database = account_database
@@ -20,8 +21,15 @@ class PasswordFileHandler:
         self.cursor = self.con.cursor()
         title = self.cursor.execute("SELECT name FROM sqlite_master;")
         if title.fetchone() is None:  # If table doesn't exist, make one
-            self.cursor.execute("CREATE TABLE accounts(account, username, password);")
+            self.cursor.execute(f"CREATE TABLE accounts({self._format_headers(self.HEADERS)});")
         return self
+
+    @staticmethod
+    def _format_headers(headers_list) -> str:
+        headers_string = ""
+        for header in headers_list:
+            headers_string += header
+        return headers_string
 
     def read_accounts(self) -> list[list]:
         self.cursor.execute("SELECT ROWID, * FROM accounts;")

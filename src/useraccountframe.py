@@ -13,17 +13,17 @@ class UserAccountFrame(PasswordManagerFrame):
         self.text_box_list = []
         self.entry_box_list = []
 
-        self._configure_labels()  # Abstracted away the config of elements for simplicity
+        self._configure_labels()  # config all elements
         self._configure_boxes()
         self._configure_entries()
         self._configure_buttons()
 
         self._configure_grid()  # config weights of columns and rows
 
-        self._place_labels()  # Abstracted away placement as well
-        self._place_boxes()
-        self._place_entries()
-        self._place_buttons()
+        self._grid_labels()  # Place all elements
+        self._grid_boxes()
+        self._grid_entries()
+        self._grid_buttons()
 
     def display(self):
         super().display()
@@ -81,6 +81,9 @@ class UserAccountFrame(PasswordManagerFrame):
     def logout(self):
         self.master.password_manager.logout()
 
+    def open_user_menu(self):
+        self.master.password_manager.open_menu()
+
     def scroll_boxes(self, *args):
         for box in self.text_box_list:
             box.yview(*args)
@@ -114,7 +117,7 @@ class UserAccountFrame(PasswordManagerFrame):
         self.new_password_entry = ctk.CTkEntry(master=self, font=self.font,
                                                placeholder_text='Password')
         self.delete_index_entry = ctk.CTkEntry(master=self, font=self.font,
-                                               placeholder_text='Index to delete')
+                                               placeholder_text='Index')
 
         self.entry_box_list.append(self.new_account_name_entry)
         self.entry_box_list.append(self.new_username_entry)
@@ -157,7 +160,10 @@ class UserAccountFrame(PasswordManagerFrame):
         self.logout_button = ctk.CTkButton(master=self, width=130, text="LOG OUT",
                                            font=self.font, command=self.logout)
 
-    def _place_labels(self):
+        self.menu_button = ctk.CTkButton(master=self, width=40, text='MENU',
+                                         font=self.font, command=self.open_user_menu)
+
+    def _grid_labels(self):
         self.title_label.grid(row=0, column=1, columnspan=3, pady=20)
 
         self.index_label.grid(row=1, column=0, sticky='e')
@@ -165,20 +171,21 @@ class UserAccountFrame(PasswordManagerFrame):
         self.username_label.grid(row=1, column=2)
         self.password_label.grid(row=1, column=3)
 
-    def _place_entries(self):
+    def _grid_entries(self):
         self.new_account_name_entry.grid(row=3, column=1, sticky='new', pady=20, padx=10)
         self.new_username_entry.grid(row=3, column=2, sticky='new', pady=20, padx=10)
         self.new_password_entry.grid(row=3, column=3, sticky='new', pady=20, padx=10)
         self.delete_index_entry.grid(row=4, column=1, pady=20, padx=10, sticky='w')
 
-    def _place_boxes(self):
+    def _grid_boxes(self):
         self.index_box.grid(row=2, column=0, sticky='nse', padx=(30, 4))
         self.account_name_box.grid(row=2, column=1, sticky='nsew', padx=4)
         self.username_box.grid(row=2, column=2, sticky='nsew', padx=4)
         self.password_box.grid(row=2, column=3, sticky='nsew', padx=4)
         self.scrollbar.grid(row=2, column=4, sticky='ns', padx=(4,30))
 
-    def _place_buttons(self):
+    def _grid_buttons(self):
         self.add_button.grid(row=3, column=0, sticky='new', pady=20, padx=10)
         self.delete_button.grid(row=4, column=0, pady=20, padx=10)
-        self.logout_button.grid(row=4, column=3, pady=20)
+        self.logout_button.grid(row=4, column=2, padx=10, sticky='e')
+        self.menu_button.grid(row=4, column=3, padx=20, sticky='w')

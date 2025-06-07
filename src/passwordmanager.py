@@ -1,4 +1,5 @@
 import os.path
+import csv
 from passlib.hash import pbkdf2_sha256
 
 from passwordfilehandler import PasswordFileHandler
@@ -67,7 +68,7 @@ class PasswordManager:
         if not self._validate_account_name(username):
             self.window.current_frame.account_does_not_exist_error()
             return
-        if not self._validate_login_info(username, password):
+        if not self._authenticate_password(username, password):
             self.window.current_frame.invalid_login_error()
             return
         self._set_active_account(username)
@@ -78,7 +79,7 @@ class PasswordManager:
         return os.path.exists(os.path.join(REL_PATH, username + ".acct"))
 
     @staticmethod
-    def _validate_login_info(username: str, password: str) -> bool:
+    def _authenticate_password(username: str, password: str) -> bool:
         account_file = os.path.join(REL_PATH, username + ".acct")
         with open(account_file, 'r') as password_file:
             stored_password = password_file.readline()
@@ -107,6 +108,12 @@ class PasswordManager:
     def logout(self):
         self._reset()
         self.window.set_login_frame()
+
+    def return_to_user_frame(self):
+        self.window.set_user_account_frame(username=self.active_account)
+
+    def open_menu(self):
+        self.window.set_user_menu_frame(username=self.active_account)
 
     def _reset(self):
         """ Un-initialize user account variables when logging out. """
@@ -178,3 +185,9 @@ class PasswordManager:
         account, username, password = account_info
         return self.window.current_frame.account_info_delete_confirmation(
             account, username, password)
+
+    def export_data(self):
+        headers = self.pfh.HEADERS
+        account_data = self.read_account_data()
+        print(headers)
+        print(account_data)
