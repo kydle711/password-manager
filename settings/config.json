@@ -1,0 +1,5 @@
+{
+  "internal theme": null,
+  "external theme": ["..", "themes", "test.json"],
+  "appearance mode": "dark"
+}

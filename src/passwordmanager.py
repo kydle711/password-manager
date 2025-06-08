@@ -1,6 +1,7 @@
 import os.path
 import csv
 from passlib.hash import pbkdf2_sha256
+from tkinter import filedialog
 
 from passwordfilehandler import PasswordFileHandler
 from utils import _is_int
@@ -189,5 +190,8 @@ class PasswordManager:
     def export_data(self):
         headers = self.pfh.HEADERS
         account_data = self.read_account_data()
-        print(headers)
-        print(account_data)
+        with open(filedialog.asksaveasfilename(), 'w', newline='') as export_file:
+            writer = csv.DictWriter(export_file, fieldnames=headers)
+            writer.writeheader()
+            for account in account_data:
+                writer.writerow(dict(zip(headers,account[1:])))
