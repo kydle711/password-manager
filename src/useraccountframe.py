@@ -101,7 +101,7 @@ class UserAccountFrame(PasswordManagerFrame):
         self.grid_rowconfigure(4, weight=0)
 
     def _configure_labels(self):
-        self.title_label = ctk.CTkLabel(master=self, font=("Arial", 28),
+        self.title_label = ctk.CTkLabel(master=self, font=self.title_font,
                                         text=f"{self.username}'s Accounts")
 
         self.index_label = ctk.CTkLabel(master=self, text='Index', font=self.font)

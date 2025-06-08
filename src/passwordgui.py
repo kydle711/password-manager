@@ -12,6 +12,7 @@ from usermenuframe import UserMenuFrame
 
 CONFIG_FILE_PATH = os.path.join('..', 'settings', 'config.json')
 ICON_FILE_PATH = os.path.join('..', 'assets', 'lock.png')
+THEME_FOLDER = os.path.join('..', 'themes')
 
 
 class PasswordManagerWindow(ctk.CTk):
@@ -40,7 +41,7 @@ class PasswordManagerWindow(ctk.CTk):
         if settings['internal theme'] is not None:
             ctk.set_default_color_theme(settings['internal theme'])
         else:
-            ctk.set_default_color_theme(os.path.join(*settings['external theme']))
+            ctk.set_default_color_theme(os.path.join(THEME_FOLDER, settings['external theme']))
 
     def set_size(self, size=('500', '450')):
         self.geometry('x'.join(size))

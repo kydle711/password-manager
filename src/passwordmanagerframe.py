@@ -12,6 +12,7 @@ class PasswordManagerFrame(CTkFrame):
         self.master = master
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        self.title_font = ('Arial', 28)
         self.font = ('Arial', 20)
         self.entry_width = 200
         self.widget_height = 40
@@ -19,7 +20,7 @@ class PasswordManagerFrame(CTkFrame):
         self.message_popup = tk.messagebox
 
     def display(self):
-        self.pack(expand=True, fill='both', padx=30, pady=30)
+        self.pack(expand=True, fill='both', padx=5, pady=5)
 
     def account_does_not_exist_error(self):
         self.message_popup.showerror(title="ERROR",
