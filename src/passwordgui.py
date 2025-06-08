@@ -19,9 +19,10 @@ class PasswordManagerWindow(ctk.CTk):
     def __init__(self, password_manager):
         super().__init__()
 
-        self._load_config_settings()
-        self.set_size()
+        self.font = None
+        self.title_font = None
         self.title("Password Manager")
+        self._load_config_settings()
         self.iconphoto(True, tkinter.PhotoImage(file=ICON_FILE_PATH))
         self.current_frame = LoginFrame(self)
         self.current_frame.display()
@@ -34,8 +35,7 @@ class PasswordManagerWindow(ctk.CTk):
         with open(CONFIG_FILE_PATH, 'r') as config_file:
             return json.load(config_file)
 
-    @staticmethod
-    def _load_config_settings():
+    def _load_config_settings(self):
         settings = PasswordManagerWindow._read_config_file()
         ctk.set_appearance_mode(settings["appearance mode"])
         if settings['internal theme'] is not None:
@@ -43,8 +43,12 @@ class PasswordManagerWindow(ctk.CTk):
         else:
             ctk.set_default_color_theme(os.path.join(THEME_FOLDER, settings['external theme']))
 
-    def set_size(self, size=('500', '450')):
+        self.font = (settings["font style"], settings["font size"])
+        self.title_font = (settings["font style"], settings["title font size"])
+
+    def set_size(self, min_height: int, min_width: int, size=('500', '450'),):
         self.geometry('x'.join(size))
+        self.minsize(width=min_width, height=min_height)
 
     @staticmethod
     def rewrite_config_file(new_settings: dict):

@@ -6,9 +6,7 @@ from passwordmanagerframe import PasswordManagerFrame
 class UserAccountFrame(PasswordManagerFrame):
     def __init__(self, master, username):
         super().__init__(master)
-        master.set_size(('900', '700'))
-        self.width = 700
-        self.height = 650
+        master.set_size(min_height=500, min_width=650, size=('850', '650'))
         self.username = username
         self.text_box_list = []
         self.entry_box_list = []

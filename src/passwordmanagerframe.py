@@ -9,11 +9,10 @@ class PasswordManagerFrame(CTkFrame):
     Also allows for easy addition of errors or messages. """
     def __init__(self, master):
         super().__init__(master)
-        self.master = master
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        self.title_font = ('Arial', 28)
-        self.font = ('Arial', 20)
+        self.title_font = master.title_font
+        self.font = master.font
         self.entry_width = 200
         self.widget_height = 40
         self.button_width = 160

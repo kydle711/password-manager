@@ -7,7 +7,7 @@ class LoginFrame(PasswordManagerFrame):
     def __init__(self, master):
         super().__init__(master)
         self._configure_grid()
-        master.set_size()
+        master.set_size(min_height=350, min_width=300)
 
         self.title_label = ctk.CTkLabel(master=self, font=self.title_font,
                                         text="LOG IN")

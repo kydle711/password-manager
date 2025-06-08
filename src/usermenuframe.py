@@ -7,7 +7,7 @@ from passwordmanagerframe import PasswordManagerFrame
 class UserMenuFrame(PasswordManagerFrame):
     def __init__(self, master, username):
         super().__init__(master)
-        master.set_size(('900', '700'))
+        master.set_size(min_width=400, min_height=400, size=('600', '600'))
         self.width = 700
         self.height = 650
         self.username = username
@@ -34,7 +34,7 @@ class UserMenuFrame(PasswordManagerFrame):
         self.grid_rowconfigure(2, weight=1)
 
     def _config_main_labels(self):
-        self.title_label = ctk.CTkLabel(master=self, font=('Arial', 28), text='Settings')
+        self.title_label = ctk.CTkLabel(master=self, font=self.title_font, text='Settings')
         self.tabview = ctk.CTkTabview(master=self)
         for tab in self.tabs:
             self.tabview.add(tab)

@@ -7,7 +7,7 @@ class NewAccountFrame(PasswordManagerFrame):
     def __init__(self, master):
         super().__init__(master)
         self.text_entry_list = []
-        master.set_size()
+        master.set_size(min_width=350, min_height=400)
         self._configure_grid()
         self.title_label = ctk.CTkLabel(
             master=self, font=self.title_font,
