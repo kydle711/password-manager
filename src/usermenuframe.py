@@ -40,8 +40,9 @@ class UserMenuFrame(PasswordManagerFrame):
 
     @staticmethod
     def apply_font_to_tabs(tabs, font):
-        tabs._segmented_button.configure(font=font)
-
+        """ Workaround for adjusting tabview font size since they don't have built in
+        font size attribute. """
+        tabs._segmented_button.configure(font=font)  # My IDE says this is a no-no ¯\_(ツ)_/¯
 
     def _config_main_buttons(self):
         self.back_button = ctk.CTkButton(master=self, width=100, font=self.font,
