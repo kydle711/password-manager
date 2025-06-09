@@ -21,15 +21,8 @@ class PasswordFileHandler:
         self.cursor = self.con.cursor()
         title = self.cursor.execute("SELECT name FROM sqlite_master;")
         if title.fetchone() is None:  # If table doesn't exist, make one
-            self.cursor.execute(f"CREATE TABLE accounts({self._format_headers(self.HEADERS)});")
+            self.cursor.execute(f"CREATE TABLE accounts({', '.join(self.HEADERS)});")
         return self
-
-    @staticmethod
-    def _format_headers(headers_list) -> str:
-        headers_string = ""
-        for header in headers_list:
-            headers_string += header
-        return headers_string
 
     def read_accounts(self) -> list[list]:
         self.cursor.execute("SELECT ROWID, * FROM accounts;")
