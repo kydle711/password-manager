@@ -21,6 +21,7 @@ class PasswordManagerWindow(ctk.CTk):
 
         self.font = None
         self.title_font = None
+        self.theme = None
         self.title("Password Manager")
         self._load_config_settings()
         self.iconphoto(True, tkinter.PhotoImage(file=ICON_FILE_PATH))
@@ -38,10 +39,12 @@ class PasswordManagerWindow(ctk.CTk):
     def _load_config_settings(self):
         settings = PasswordManagerWindow._read_config_file()
         ctk.set_appearance_mode(settings["appearance mode"])
-        if settings['internal theme'] is not None:
-            ctk.set_default_color_theme(settings['internal theme'])
+        if settings["internal theme"] is not None:
+            ctk.set_default_color_theme(settings["internal theme"])
+            self.theme = settings["internal_theme"]
         else:
-            ctk.set_default_color_theme(os.path.join(THEME_FOLDER, settings['external theme']))
+            ctk.set_default_color_theme(os.path.join(THEME_FOLDER, settings["external theme"]))
+            self.theme = settings["external theme"].removesuffix('.json')
 
         self.font = (settings["font style"], settings["font size"])
         self.title_font = (settings["font style"], settings["title font size"])
@@ -50,8 +53,7 @@ class PasswordManagerWindow(ctk.CTk):
         self.geometry('x'.join(size))
         self.minsize(width=min_width, height=min_height)
 
-    @staticmethod
-    def rewrite_config_file(new_settings: dict):
+    def rewrite_config_file(self, new_settings: dict):
         current_settings = PasswordManagerWindow._read_config_file()
         for option in new_settings:
             if option in current_settings:
@@ -59,6 +61,9 @@ class PasswordManagerWindow(ctk.CTk):
 
         with open(CONFIG_FILE_PATH, 'w') as config_file:
             json.dump(current_settings, config_file, indent='\t')
+        self._load_config_settings()
+        username = self.current_frame.username  # Temporarily save username param
+        self.set_user_menu_frame(username)     # Re-call with username to refresh theme
 
     """ Change frame methods """
 

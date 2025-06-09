@@ -1,8 +1,8 @@
 {
-  "internal theme": null,
-  "external theme": "hacked.json",
-  "appearance mode": "dark",
-  "font size": 20,
-  "title font size": 28,
-  "font style": "Arial"
+	"internal theme": null,
+	"external theme": "flipperzero.json",
+	"appearance mode": "Dark",
+	"font size": 20,
+	"title font size": 24,
+	"font style": "Arial"
 }
