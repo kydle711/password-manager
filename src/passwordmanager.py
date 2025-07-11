@@ -10,8 +10,15 @@ REL_PATH = os.path.join('..', 'data')
 
 
 class PasswordManager:
-    """ Handles the logic of the app. Interfaces with the different frames
-    depending on the context of the app. """
+    """ Handles the main logic of the app. Interfaces with the different UI frames
+    through the main window depending on the context of the app. Gets instantiated
+    in main.py. Set_window() is called in main.py to connect PasswordManager to
+    the UI. This allows PasswordManager to persist as the back-end logic across
+    different states of the app. When a user logs in, PasswordManager sets the
+    account, database, and key_file attributes for the logic associated with
+    storing account data though the PasswordFileHandler. Handles the top level
+    logic of adding/deleting account data, logging in/out, exporting data to a
+    csv file, and creating a local account."""
     def __init__(self):
         self.pfh = PasswordFileHandler
         self.active_account = None
@@ -44,7 +51,7 @@ class PasswordManager:
     def _verify_matching_passwords(pass1: str, pass2: str) -> bool:
         return pass1 == pass2
 
-    def create_new_local_account(self, new_username, pass1, pass2):
+    def create_new_local_account(self, new_username: str, pass1: str, pass2: str):
         if not PasswordManager._verify_password_length(pass1):
             self.window.current_frame.password_too_short_error()
             return
@@ -65,7 +72,7 @@ class PasswordManager:
 
     """ Login methods """
 
-    def login(self, username, password):
+    def login(self, username: str, password: str):
         if not self._validate_account_name(username):
             self.window.current_frame.account_does_not_exist_error()
             return
@@ -86,7 +93,7 @@ class PasswordManager:
             stored_password = password_file.readline()
             return pbkdf2_sha256.verify(password, stored_password)
 
-    def _set_active_account(self, username):
+    def _set_active_account(self, username: str):
         self.active_account = username
         self.account_database = os.path.join(REL_PATH, username + ".db")
         self.key_file = os.path.join(REL_PATH, username + ".key")
@@ -94,11 +101,11 @@ class PasswordManager:
     """ User account methods """
 
     @staticmethod
-    def _check_data_directory(dir_path) -> bool:
+    def _check_data_directory(dir_path: str) -> bool:
         return os.path.isdir(dir_path)
 
     @staticmethod
-    def _create_data_directory(dir_path):
+    def _create_data_directory(dir_path: str):
         os.makedirs(dir_path)
 
     def _verify_data_directory(self):

@@ -4,6 +4,16 @@ from cryptography.fernet import Fernet
 
 
 class InfoEncrypter:
+    """ InfoEncrypter handles the functions of creating, storing, and reading the
+    encryption key for the user's password information. It also performs the
+    encryption/decryption operations. It couples only with the PasswordFileHandler
+    class. A new instance of the InfoEncrypter is instantiated each time the
+    PasswordFileHandler(a context manager) is instantiated. This allows it to be
+    destroyed each time the context manager exits. It depends on a username-based
+    key file to be passed in to the constructor upon instantiation by the
+    PasswordFileHandler. If the key file doesn't already exist, InfoEncrypter
+    will generate a new key and write it there, else if the file already exists,
+    it will read the key and use it. """
     def __init__(self, key_file):
         self.key_file = key_file
         self.encryption_key = None
