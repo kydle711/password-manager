@@ -5,6 +5,11 @@ from passwordmanagerframe import PasswordManagerFrame
 
 
 class UserMenuFrame(PasswordManagerFrame):
+    """ UserMenuFrame is capable of exporting data, so it can only be reached
+    after logging in to UserAccountFrame. Allows user to export data as a CSV file,
+    change theme and font size, and reset password. Other functions are in the works.
+    Interfaces with PasswordManager for reading, decrypting account info, and writing
+    to CSV file though PasswordManagerWindow(master)."""
     def __init__(self, master, username):
         super().__init__(master)
         master.set_size(min_width=450, min_height=450, size=('600', '700'))
@@ -40,7 +45,7 @@ class UserMenuFrame(PasswordManagerFrame):
 
     @staticmethod
     def apply_font_to_tabs(tabs, font):
-        """ Workaround for adjusting tabview font size since they don't have built in
+        """ Workaround for adjusting tabview font size since they don't have built-in
         font size attribute. """
         tabs._segmented_button.configure(font=font)  # My IDE says this is a no-no ¯\_(ツ)_/¯
 

@@ -16,9 +16,17 @@ THEME_FOLDER = os.path.join('..', 'themes')
 
 
 class PasswordManagerWindow(ctk.CTk):
+    """ The PasswordManagerWindow class is the main app window for the program
+    and serves as the parent for all of the UI frames. It is instantiated in main.py
+    and the PasswordManager is passed into the constructor to allow the gui to
+    interface with the back-end. It reads the theme config file, sets up the icon,
+    sets window title, etc. It also rewrites the config file when a new theme is
+    applied. The 'change frame' methods handle destroying the current UI frame
+    and setting the new UI frame depending on the context of the app. It serves
+    as a mediator between the individual UI frames, whose buttons make function
+    calls through the PasswordManagerWindow, and the PasswordManager(back-end)."""
     def __init__(self, password_manager):
         super().__init__()
-
         self.font = None
         self.title_font = None
         self.theme = None

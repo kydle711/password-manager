@@ -4,6 +4,9 @@ from passwordmanagerframe import PasswordManagerFrame
 
 
 class LoginFrame(PasswordManagerFrame):
+    """ The LoginFrame is the opening page of the app. Interfaces with the
+    PasswordManager(master) through the PasswordManagerWindow to make is function calls.
+    """
     def __init__(self, master):
         super().__init__(master)
         self._configure_grid()

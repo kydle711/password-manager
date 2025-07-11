@@ -4,6 +4,9 @@ from passwordmanagerframe import PasswordManagerFrame
 
 
 class NewAccountFrame(PasswordManagerFrame):
+    """ NewAccountFrame is reached from the create new account button in
+    LoginFrame. Makes function calls through PasswordManagerWindow(master) to the
+    PasswordManager(back-end)."""
     def __init__(self, master):
         super().__init__(master)
         self.text_entry_list = []

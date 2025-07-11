@@ -4,6 +4,14 @@ from passwordmanagerframe import PasswordManagerFrame
 
 
 class UserAccountFrame(PasswordManagerFrame):
+    """ UserAccountFrame is the frame where user data is accessed. This frame
+    needs the username passed in for the display to show who is logged in. User
+    needs to be authenticated for this frame to load. The PasswordManager provides
+    this username and subsequently sets itself with the same username to be able
+    to load the encryption key for account info reading/writing. UserAccountFrame
+    is also the pathway to the UserMenuFrame, which allows exporting of data and
+    customization. UserAccountFrame interfaces with PasswordManager through
+    PasswordManagerWindow(master) for adding and removing account data."""
     def __init__(self, master, username):
         super().__init__(master)
         master.set_size(min_height=500, min_width=650, size=('850', '650'))

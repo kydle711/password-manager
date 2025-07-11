@@ -2,11 +2,9 @@
 # build app package
 # unittests
 # add keylisteners for buttons
-# add export function?
 # add recovery function?
 # improve security?
 # add change password menu
-# add customizable settings
 # add auto-logout
 # obfuscate encryption key and hashed password
 
