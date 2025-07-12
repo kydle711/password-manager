@@ -1,15 +1,28 @@
 
 import sqlite3
-from encryptionkey import InfoEncrypter
+from infoencrypter import InfoEncrypter
 
 
 class PasswordFileHandler:
-    """ This context manager class handles all the functions of the unique user
-    files for the UserAccountFrame
+    """ The PasswordFileHandler is a context manager that handles the reading and
+    writing of data to the user's account info database. It is only instantiated
+    during read/write operations and needs the user-specific account database
+    and key-file passed to it. It then instantiates an InfoEncrypter and passes
+    it the key file name. The PasswordFileHandler only handles read/write
+    operations to the database. It returns any read data after it finishes
+    it's operation and exits. In addition to the InfoEncrypter, it also interfaces
+    with the PasswordManager, where it receives data to write, returns read data,
+    receives its constructor params, and receives indices for deleting. When
+    deleting, the PasswordManager passes an index to the PasswordFileHandler,
+    which first verifies that the index exists and returns the info for that index
+    so that the PasswordManager can prompt for user verification before deletion.
+    After deleting an account, the database is 'VACUUMED' which preserves
+    sequential indices as the primary key. It is also more secure as it cleans
+    up any data in memory that was only marked as deleted but still had it's value.
     """
     HEADERS = ['account', 'username', 'password']
 
-    def __init__(self, account_database, key_file):
+    def __init__(self, account_database: str, key_file: str):
         self.account_database = account_database
         self.key_file = key_file
         self.con = None  # SQLite connection
@@ -44,7 +57,7 @@ class PasswordFileHandler:
     def delete_account_info(self, index_to_delete: int):
         self.cursor.execute(f"DELETE FROM accounts WHERE ROWID = {index_to_delete};")
         self.con.commit()
-        self.cursor.execute("VACUUM accounts;")
+        self.cursor.execute("VACUUM;")
         self.con.commit()
 
     def find_account_from_index(self, index: int) -> list:
