@@ -2,7 +2,7 @@ import os.path
 import pytest
 
 from cryptography.fernet import Fernet
-from infoencrypter import InfoEncrypter
+from src.infoencrypter import InfoEncrypter
 
 TEMP_KEY_FILE = "temp_key.txt"
 
