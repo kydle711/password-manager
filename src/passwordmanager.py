@@ -6,8 +6,6 @@ from tkinter import filedialog
 from passwordfilehandler import PasswordFileHandler
 from utils import _is_int
 
-REL_PATH = os.path.join('..', 'data')
-
 
 class PasswordManager:
     """ Handles the main logic of the app. Interfaces with the different UI frames
@@ -19,7 +17,8 @@ class PasswordManager:
     storing account data though the PasswordFileHandler. Handles the top level
     logic of adding/deleting account data, logging in/out, exporting data to a
     csv file, and creating a local account."""
-    def __init__(self):
+    def __init__(self, data_dir):
+        self.REL_PATH = data_dir
         self.pfh = PasswordFileHandler
         self.active_account = None
         self.account_database = None
@@ -34,9 +33,8 @@ class PasswordManager:
 
     """ Create account methods """
 
-    @staticmethod
-    def _check_unique_local_account(new_account_name: str) -> bool:
-        return not os.path.exists(os.path.join(REL_PATH, new_account_name + '.acct'))
+    def _check_unique_local_account(self, new_account_name: str) -> bool:
+        return not os.path.exists(os.path.join(self.REL_PATH, new_account_name + '.acct'))
 
     @staticmethod
     def _check_username_length(new_username: str) -> bool:
@@ -52,20 +50,20 @@ class PasswordManager:
         return pass1 == pass2
 
     def create_new_local_account(self, new_username: str, pass1: str, pass2: str):
-        if not PasswordManager._verify_password_length(pass1):
+        if not self._verify_password_length(pass1):
             self.window.current_frame.password_too_short_error()
             return
 
-        if not PasswordManager._verify_matching_passwords(pass1, pass2):
+        if not self._verify_matching_passwords(pass1, pass2):
             self.window.current_frame.passwords_not_matching_error()
             return
 
-        if not PasswordManager._check_unique_local_account(new_username):
+        if not self._check_unique_local_account(new_username):
             self.window.current_frame.account_exists_error()
             return
 
         hashed_password = pbkdf2_sha256.hash(pass1)
-        new_account_file = os.path.join(REL_PATH, new_username + ".acct")
+        new_account_file = os.path.join(self.REL_PATH, new_username + ".acct")
         with open(new_account_file, 'w') as af:
             af.write(hashed_password)
         self.window.current_frame.account_created_message()
@@ -82,21 +80,19 @@ class PasswordManager:
         self._set_active_account(username)
         self.window.set_user_account_frame(username)
 
-    @staticmethod
-    def _validate_account_name(username: str) -> bool:
-        return os.path.exists(os.path.join(REL_PATH, username + ".acct"))
+    def _validate_account_name(self, username: str) -> bool:
+        return os.path.exists(os.path.join(self.REL_PATH, username + ".acct"))
 
-    @staticmethod
-    def _authenticate_password(username: str, password: str) -> bool:
-        account_file = os.path.join(REL_PATH, username + ".acct")
+    def _authenticate_password(self, username: str, password: str) -> bool:
+        account_file = os.path.join(self.REL_PATH, username + ".acct")
         with open(account_file, 'r') as password_file:
             stored_password = password_file.readline()
             return pbkdf2_sha256.verify(password, stored_password)
 
     def _set_active_account(self, username: str):
         self.active_account = username
-        self.account_database = os.path.join(REL_PATH, username + ".db")
-        self.key_file = os.path.join(REL_PATH, username + ".key")
+        self.account_database = os.path.join(self.REL_PATH, username + ".db")
+        self.key_file = os.path.join(self.REL_PATH, username + ".key")
 
     """ User account methods """
 
